@@ -22,7 +22,7 @@ When the ball contacts the  PaddleNode the horizontal velocity is reflected with
 
 ### Handling Physics Body Contacts Naively
 
-The PlayfieldScene is assigned as the contact delegate for the physics world and implements the contact delegate method *didBeginContact*.
+The PlayfieldScene is assigned as the contact delegate for the physics world and implements the contact delegate method `didBeginContact`.
 
 The main observation to make is that the bodies in a contact can appear in any order. For example the first two clauses in the conditional below are essectially checking for the same thing, that the ball is contacting the PlayfieldScene edges.
 
@@ -121,7 +121,7 @@ Using the Visitor pattern we can double dispatch the outcome of the contact base
 }
 {% endhighlight %}
 
-The _VisitablePhysicsBody_ class is a simple wrapper for an _SKPhysicsBody_ instance. It implements a method called accept, which accepts the visitor, and which in turn invokes the actual visit. A wrapper is used as _acceptVisitor_ cannot be implemented as a category on _SKPhysicsBody_ given the physics bodies carried by the _SKPhysicsContact_ instance are actually instances of private class _PKPhysicsBody_.
+The `VisitablePhysicsBody` class is a simple wrapper for an _SKPhysicsBody_ instance. It implements a method called accept, which accepts the visitor, and which in turn invokes the actual visit. A wrapper is used as _acceptVisitor_ cannot be implemented as a category on `SKPhysicsBody` given the physics bodies carried by the `SKPhysicsContact` instance are actually instances of private class `PKPhysicsBody`.
 
 {% highlight objective-c %}
 @implementation VisitablePhysicsBody
@@ -143,7 +143,7 @@ The _VisitablePhysicsBody_ class is a simple wrapper for an _SKPhysicsBody_ inst
 @end
 {% endhighlight %}
 
-Out _ContactVisitor_ base class implements convenience constructor _contactVisitorWithBody:forContact_ which constructs one of its subclasses based on the physics body category of it's first argument. This is the first part of the double dispatch, we have an instance of a class which is named after one of the bodies in the contact e.g. _BallNodeContactVisitor_ _PaddleNodeContactVisitor_ etc.
+Out _ContactVisitor_ base class implements convenience constructor `contactVisitorWithBody:forContact` which constructs one of its subclasses based on the physics body category of it's first argument. This is the first part of the double dispatch, we have an instance of a class which is named after one of the bodies in the contact e.g. `BallNodeContactVisitor` `PaddleNodeContactVisitor` etc.
 
 
 {% highlight objective-c %}
@@ -176,7 +176,7 @@ Out _ContactVisitor_ base class implements convenience constructor _contactVisit
 
 {% endhighlight %}
 
-The _visit_ method in our _ContactVisitor_ implements the second part of the double dispatch by sending a message named after the second physics body in the contact to the newly constructed _ContactVisitor_ subclass instance which is named after the first body in the contact e.g. _visitBallNode_ _visitPaddleNode_ etc.
+The `visit` method in our `ContactVisitor` implements the second part of the double dispatch by sending a message named after the second physics body in the contact to the newly constructed `ContactVisitor` subclass instance which is named after the first body in the contact e.g. `visitBallNode` `visitPaddleNode` etc.
 
 
 {% highlight objective-c %}
@@ -203,7 +203,7 @@ The _visit_ method in our _ContactVisitor_ implements the second part of the dou
 @end
 {% endhighlight %}
 
-We now have a class _BallNodeContactVisitor_ which is solely concenred with handling contacts for nodes of class _BallNode_. The methods within the class follow a naming convention determined by the _visit_ method and allows us to determine the outcome of the contact with other node types.
+We now have a class `BallNodeContactVisitor` which is solely concenred with handling contacts for nodes of class `BallNode`. The methods within the class follow a naming convention determined by the `visit` method and allows us to determine the outcome of the contact with other node types.
 
 {% highlight objective-c %}
 @implementation BallNodeContactVisitor
@@ -228,7 +228,7 @@ We now have a class _BallNodeContactVisitor_ which is solely concenred with hand
 @end
 {% endhighlight %}
 
-On the flip side we have another class named _PaddleNodeContactVisitor_ which handles contacts for nodes of class _PaddleNode_.
+On the flip side we have another class named `PaddleNodeContactVisitor` which handles contacts for nodes of class `PaddleNode`.
 
 {% highlight objective-c %}
 @implementation PaddleNodeContactVisitor
@@ -244,7 +244,7 @@ On the flip side we have another class named _PaddleNodeContactVisitor_ which ha
 @end
 {% endhighlight %}
 
-You can handle the same contact in two seperate places, but you only really want to do it in one place. In the examples above the same contact between the _BallNode_ and the _PaddleNode_ will be dispatched to both the instances of _BallNodeContactVisitor_ and _PaddleNodeVisitor_ if they implement the respective methods _visitPaddleNode_ and _visitBallNode_. These methods don't have to be implemneted as the _ContactVisitor_ base class _visit_ method checks if they respond to the selectors firstly. In practice you'd only implement either _visitPaddleNode_ or _visitBallNode_.
+You can handle the same contact in two seperate places, but you only really want to do it in one place. In the examples above the same contact between the `BallNode` and the `PaddleNode` will be dispatched to both the instances of `BallNodeContactVisitor` and `PaddleNodeVisitor` if they implement the respective methods `visitPaddleNode` and `visitBallNode`. These methods don't have to be implemneted as the `ContactVisitor` base class `visit` method checks if they respond to the selectors firstly. In practice you'd only implement either `visitPaddleNode` or `visitBallNode`.
 
 ### References
 
