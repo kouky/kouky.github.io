@@ -4,8 +4,10 @@ title: About
 permalink: /about/
 ---
 
-I am an iOS developer located in Melbourne, Australia.
+I'm an iOS developer currently working on indoor bluetooth location technology. I'm located in Melbourne, Australia's coffee and art capital.
 
-Over many years I've invested in my professional development as a software developer by attending conferences, workshops, participating in community events, and working on open source projects.
+My professional development has been shaped by the teams and products I have worked on. I also attend conferences, organise and participate in community events, and contribute to open source projects.
 
-If you're interested in working together please do get in touch.
+This site hosts some of my extended writing efforts which I hope you find informative.
+
+Feel free to contact me if you're interested in working together.
