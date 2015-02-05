@@ -1,7 +1,6 @@
 ---
 layout: post
 title:  "Double Dispatch Sprite Kit Physics Contacts"
-date:   2014-01-24 12 :00:00
 categories: blog ios
 ---
 
