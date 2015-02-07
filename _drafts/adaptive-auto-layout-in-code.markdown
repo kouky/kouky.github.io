@@ -51,9 +51,89 @@ The code snippet below creates the Auto Layout constraints for the coloured squa
 }
 {% endhighlight %}
 
+### Install Size Class Constraints
+
+The following function when called will create and install the generic constraints for our top level views. By generic we mean constraints which apply for both regular and compact [size classes][adaptivity-layout]. In interface builder and Matthew's article this corrresponds to the _any-width any-height_ setting.
+
+{% highlight objective-c %}
+- (void)installGenericConstraints
+{
+    UIView *superView = self.view;
+
+    [self.headerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.equalTo(@60);
+        make.left.right.and.top.equalTo(superView);
+    }];
+
+    [self.pictureView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.equalTo(self.pictureView.mas_width);
+        make.left.equalTo(superView);
+    }];
+
+    [self.authorView mas_makeConstraints:^(MASConstraintMaker *make) {
+        addObject:make.height.equalTo(@50);
+        make.top.equalTo(self.headerView.mas_bottom);
+    }];
+}
+{% endhighlight %}
+
+The following function creates layout constraints which apply only to the iPhone portrait orientation. The Masonry constraint maker `mas_makeConstraints:` returns an array of the constraints created. We use that return value to store the portrait constraints in a view controller property. Enabling us to switch them off and on again as the device changes orientation.
+
+{% highlight objective-c %}
+- (void)installPhonePortraitConstraints
+{
+    NSMutableArray *constraints = [[NSMutableArray alloc] init];
+
+    [self.authorView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [constraints addObject:make.left.and.right.equalTo(self.view)];
+    }];
+
+    [self.pictureView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [constraints addObject:make.top.equalTo(self.authorView.mas_bottom)];
+        [constraints addObject:make.right.equalTo(self.view)];
+    }];
+
+    [self.likesView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [constraints addObject:make.top.equalTo(self.pictureView.mas_bottom).with.offset(5)];
+        [constraints addObject:make.left.and.right.equalTo(self.view)];
+    }];
+
+    self.phonePortraitConstraints = [constraints copy];
+}
+{% endhighlight %}
+
+Similarly ehe following function creates layout constraints which apply only to the iPhone landscape orientation. Once again we stored the constraimts in a property so we can swicth them on and off as required.
+
+{% highlight objective-c %}
+- (void)installPhoneLandscapeConstraints
+{
+    NSMutableArray *constraints = [[NSMutableArray alloc] init];
+
+    [self.authorView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [constraints addObject:make.left.equalTo(self.pictureView.mas_right)];
+        [constraints addObject:make.width.lessThanOrEqualTo(self.pictureView)];
+    }];
+
+    [self.pictureView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [constraints addObject:make.top.equalTo(self.headerView.mas_bottom)];
+        [constraints addObject:make.bottom.equalTo(self.view)];
+    }];
+
+    [self.likesView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [constraints addObject:make.top.equalTo(self.authorView.mas_bottom)];
+        [constraints addObject:make.left.equalTo(self.pictureView.mas_right)];
+        [constraints addObject:make.width.lessThanOrEqualTo(self.pictureView)];
+    }];
+
+    self.phoneLandscapeConstraints = [constraints copy];
+}
+{% endhighlight %}
+
+
 [matthew]: http://mathewsanders.com/
 [matthew-article]: http://mathewsanders.com/designing-adaptive-layouts-for-iphone-6-plus/
 [masonry]: https://github.com/Masonry/Masonry
 [update-constraints]: https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIView_Class/#//apple_ref/occ/instm/UIView/updateConstraints
 [masonry-squares-fork]: https://github.com/kouky/Masonry/blob/squares-example/Examples/Masonry%20iOS%20Examples/MASExampleSquaresView.m
+[adaptivity-layout]: https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/MobileHIG/LayoutandAppearance.html
 
