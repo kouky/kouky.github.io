@@ -6,13 +6,54 @@ categories: blog ios
 
 [Matthew Sanders][matthew] posted an excellent article in September 2014 on [Adaptive Layouts for iPhone 6][matthew-article]. I worked through it meticulously, following along with the examples in Xcode 6 using Interface Builder to create views and auto layout constraints visually.
 
-The last half of the article focussed on building an adaptive layout for a hypothetical Instragram interface. I managed to replicate his final results using Interface Builder. The purpose of this article is to recreate that adapatve interface in code.
-
 {% include figure.html caption="Image by Matthew Sanders" asset="/assets/Instagram-rotate-size-class.gif" %}
 
-In 2014 I started using [Masonry][masonry], a light-weight layout framework which wraps AutoLayout with a nicer syntax. The layout DSL Masonry provides is succinct, easy to recall and it has been a boon for my productivity when working with auto layout.
+The last half of the article focussed on building an adaptive layout for a hypothetical Instragram interface. I replicated the final results using Interface Builder however I was not impressed by the tediousness of installing, adjusting, and inspecting auto layout constraints visually.
+
+The purpose of this article is to illustrate how that adapative Instagram interface can be succicntly recreated in code. I'll be using [Masonry][masonry] a light-weight layout framework which wraps AutoLayout with a nicer syntax.
+
+### Simple Squares
+
+To illustrate the succint layout DSL provided by [Masonry][masonry] we can recereate the adaptive coloured squares examples from first half of Matthew's article.
+
+{% include figure.html caption="Image by Matthew Sanders" asset="/assets/Constraint-5.gif" %}
+
+The code snippet below illsutrates creating the Auto Layout constraints for the coloured squares in the `UIView` method [updateConstraints][update-constraints]. The chainable expressive syntax of Masonry shines through. A working example is availble from my fork of Masonry on [github][masonry-squares-fork].
+
+{% highlight objective-c %}
+- (void)updateConstraints
+{
+    UIView *superView = self;
+    UIEdgeInsets padding = UIEdgeInsetsMake(20, 20, 0, 20);
+
+    [self.blueSquareView mas_makeConstraints:^(MASConstraintMaker *make) {
+
+        // Make the view a square
+        make.height.equalTo(self.blueSquareView.mas_width);
+
+        // Pin the view to the superview
+        make.top.and.left.equalTo(superView).with.insets(padding);
+
+        // Make the blue square width equal to the pin square
+        make.width.equalTo(self.pinkSquareView);
+
+        // Pin the blue square right edge to the pink square left edge
+        make.right.equalTo(self.pinkSquareView.mas_left).with.offset(-20);
+    }];
+
+    [self.pinkSquareView mas_makeConstraints:^(MASConstraintMaker *make) {
+
+        make.top.and.right.equalTo(superView).with.insets(padding);
+        make.height.equalTo(self.pinkSquareView.mas_width);
+    }];
+
+    [super updateConstraints];
+}
+{% endhighlight %}
 
 [matthew]: http://mathewsanders.com/
 [matthew-article]: http://mathewsanders.com/designing-adaptive-layouts-for-iphone-6-plus/
 [masonry]: https://github.com/Masonry/Masonry
+[update-constraints]: https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIView_Class/#//apple_ref/occ/instm/UIView/updateConstraints
+[masonry-squares-fork]: https://github.com/kouky/Masonry/blob/squares-example/Examples/Masonry%20iOS%20Examples/MASExampleSquaresView.m
 
