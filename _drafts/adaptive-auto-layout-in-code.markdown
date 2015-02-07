@@ -18,7 +18,7 @@ To illustrate the succint layout DSL provided by [Masonry][masonry] we can recer
 
 {% include figure.html caption="Image by Matthew Sanders" asset="/assets/Constraint-5.gif" %}
 
-The code snippet below illsutrates creating the Auto Layout constraints for the coloured squares in the `UIView` method [updateConstraints][update-constraints]. The chainable expressive syntax of Masonry shines through. A working example is availble from my fork of Masonry on [github][masonry-squares-fork].
+The code snippet below creates the Auto Layout constraints for the coloured squares in the `UIView` method [updateConstraints][update-constraints]. The chainable expressive syntax of Masonry shines through. A working example is availble from my fork of Masonry on [github][masonry-squares-fork].
 
 {% highlight objective-c %}
 - (void)updateConstraints
@@ -34,7 +34,7 @@ The code snippet below illsutrates creating the Auto Layout constraints for the 
         // Pin the view to the superview
         make.top.and.left.equalTo(superView).with.insets(padding);
 
-        // Make the blue square width equal to the pin square
+        // Make the blue square width equal to the pink square
         make.width.equalTo(self.pinkSquareView);
 
         // Pin the blue square right edge to the pink square left edge
