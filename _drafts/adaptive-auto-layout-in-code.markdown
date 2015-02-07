@@ -8,9 +8,9 @@ categories: blog ios
 
 {% include figure.html caption="Image by Matthew Sanders" asset="/assets/Instagram-rotate-size-class.gif" %}
 
-The last half of the article focussed on building an adaptive layout for a hypothetical Instragram interface. I replicated the final results using Interface Builder however I was not impressed by the tediousness of installing, adjusting, and inspecting auto layout constraints visually.
+The last half of the article focussed on building an adaptive layout for a hypothetical Instragram interface. I replicated the final results using Interface Builder however I was not impressed by the tediousness of installing, finding, adjusting, and inspecting auto layout constraints visually across multiple [size classes][adaptivity-layout].
 
-The purpose of this article is to illustrate how that adapative Instagram interface can be succicntly recreated in code. I'll be using [Masonry][masonry] a light-weight layout framework which wraps AutoLayout with a nicer syntax.
+The purpose of this article is to illustrate how that adapative Instagram interface can be esily recreated in code. I'll be using [Masonry][masonry] a light-weight layout framework which wraps AutoLayout with a nicer syntax.
 
 ### Simple Squares
 
