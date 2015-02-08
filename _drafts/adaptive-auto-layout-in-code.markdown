@@ -8,7 +8,7 @@ categories: blog ios
 
 {% include figure.html caption="Image by Matthew Sanders" asset="/assets/Instagram-rotate-size-class.gif" %}
 
-The last half of the article focussed on building an adaptive layout for a hypothetical Instragram interface that shifted information in landscape orientation. I replicated the final results using Interface Builder however I was not impressed by the tediousness of installing, finding, adjusting, and inspecting auto layout constraints visually across multiple [size classes][adaptivity-layout].
+The last half of the article focussed on building an adaptive layout for a hypothetical Instragram interface that shifted information in landscape orientation. I replicated the final results using Interface Builder however I was not impressed by the tediousness of installing, finding, adjusting, and inspecting auto layout constraints visually across multiple [size class traits][adaptivity-layout].
 
 The purpose of this article is to illustrate how that adapative Instagram interface can be recreated in code. I'll be using [Masonry][masonry] a light-weight layout framework which wraps AutoLayout with a nicer syntax.
 
@@ -53,15 +53,23 @@ The code snippet below creates the Auto Layout constraints for the coloured squa
 
 ### Adapative Instagram Example
 
-The graphic below highlights the four top level views of our application. The challenge will be to install layout constraints in code that can be switched on and off as the size classes change during device rotation.
+The graphic below denotes the four main subviews of our example application. The challenge will be to install layout constraints in code that can be switched on and off as the size class traits change during device rotation.
 
-> Note: As of iOS8 all rotation-related methods are deprecated. Instead, rotations are treated as a change in the size of the view controller’s view. So now when we talk about rotations and orientatons we're really talking about changes in [size classes][adaptivity-layout] which are part of the new `UITraitCollection` class.
+{% include figure.html caption="Layout Subviews" asset="/assets/layout-overview.jpg" %}
+
+When the layout changes to landscape we must activate constraints which slide the `AuthorView` to the right, and move the `LikesView` rightwards and upwards. The `pictureView` will loose it's full width constraint meanwhile ehe `HeaderView` meanwhile maintains its layout in both orientations.
+
+> Note: As of iOS8 all rotation-related methods are deprecated. Instead rotations are treated as a change in the size of the view controller’s view. So when we talk about rotations and orientatons we're really talking about changes in [size class traits][adaptivity-layout] which are part of the new `UITraitCollection` class.
 
 #### Generic Constraints
 
-Our first task is to install the constraints for the generic size class, and by generic we mean constraints which apply for both regular and compact [size classes][adaptivity-layout]. In interface builder and Matthew's article this corrresponds to the _any-width any-height_ setting.
+Our first task is to install the constraints for the generic size class, and by generic we mean constraints which apply for both regular and compact [size class traits][adaptivity-layout]. For Matthew's article which uses Interface Builder this corrresponds to the _any-width any-height_ setting.
 
-The `headerView` has a fixed height; it's left, right, and top edges are pinned to the super view. Our `pictureView` will always be displayed as a square so we define a contraint equating it's height and width.  The `authorView` will also have a fixed height and it's top edge will always be pinned to the bottom edge of the `headerView`. The following function when called will create and install these generic constraints for our four top level views.
+{% include figure.html caption="Generic Constraints" asset="/assets/generic-constraints.jpg" %}
+
+The genric constraints are as follows, the `headerView` has a fixed height; its left, right, and top edges are pinned to the super view. Our `pictureView` will always be displayed as a square so we define a contraint equating it's height and width.  The `authorView` will also have a fixed height and it's top edge will always be pinned to the bottom edge of the `headerView`.
+
+The following function when called will create and install these generic constraints.
 
 {% highlight objective-c %}
 - (void)installGenericConstraints
@@ -84,6 +92,8 @@ The `headerView` has a fixed height; it's left, right, and top edges are pinned 
     }];
 }
 {% endhighlight %}
+
+#### Portrait Constraints
 
 The following function creates layout constraints which apply only to the iPhone portrait orientation. The Masonry constraint maker `mas_makeConstraints:` returns an array of the constraints created. We use that return value to store the portrait constraints in a view controller property. Enabling us to switch them off and on again as the device changes orientation.
 
@@ -143,3 +153,4 @@ Similarly ehe following function creates layout constraints which apply only to 
 [update-constraints]: https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIView_Class/#//apple_ref/occ/instm/UIView/updateConstraints
 [masonry-squares-fork]: https://github.com/kouky/Masonry/blob/squares-example/Examples/Masonry%20iOS%20Examples/MASExampleSquaresView.m
 [adaptivity-layout]: https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/MobileHIG/LayoutandAppearance.html
+[github-app]: https://github.com/kouky/adaptive-instagram-app
