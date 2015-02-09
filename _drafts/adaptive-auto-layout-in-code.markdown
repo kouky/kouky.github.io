@@ -53,13 +53,15 @@ The code snippet below creates the Auto Layout constraints for the coloured squa
 
 ### Adapative Instagram Example
 
-The graphic below denotes the four main subviews of our example application. The challenge will be to install layout constraints in code that can be switched on and off as the size class traits change during device rotation.
+The graphic below denotes the four main subviews of our hypoethtical Instagram application which we'll build in code. The challenge will be to install layout constraints in code that can be switched on and off as the [size class traits][adaptivity-layout] change during device rotation.
 
 {% include figure.html caption="Layout Subviews" asset="/assets/layout-overview.jpg" %}
 
-When the layout changes to landscape we must activate constraints which slide the `AuthorView` to the right, and move the `LikesView` rightwards and upwards. The `pictureView` will loose it's full width constraint meanwhile ehe `HeaderView` meanwhile maintains its layout in both orientations.
+When the layout changes to landscape we must activate constraints which slide the `AuthorView` to the right, and move the `LikesView` rightwards and upwards. The `pictureView` will loose it's full width constraint meanwhile the `HeaderView` maintains its layout in both orientations. This process must be reversed as the phone rotates back to portrait orientation.
 
 > Note: As of iOS8 all rotation-related methods are deprecated. Instead rotations are treated as a change in the size of the view controller’s view. So when we talk about rotations and orientatons we're really talking about changes in [size class traits][adaptivity-layout] which are part of the new `UITraitCollection` class.
+
+If you'd prefer to follow along in Xcode clone the source for this app from my [github][github-app].
 
 #### Generic Constraints
 
@@ -95,7 +97,13 @@ The following function when called will create and install these generic constra
 
 #### Portrait Constraints
 
-The following function creates layout constraints which apply only to the iPhone portrait orientation. The Masonry constraint maker `mas_makeConstraints:` returns an array of the constraints created. We use that return value to store the portrait constraints in a view controller property. Enabling us to switch them off and on again as the device changes orientation.
+The next step is to install the constraints relevant only to the iPhone portrait orientation. Determining which constraints are required is a process of _filling-in-the-blanks_ from the generic constraints illustration.
+
+{% include figure.html caption="Portrait Constraints" asset="/assets/portrait-constraints.jpg" %}
+
+The portarit specific constraints are pinning the `AuthorView` left and right edges to the super view, this makes it span the full width. Pinning the top and right edge of the `pictureView` to the bottom of the `authorView` and the right edge of the superview respectively. The `LikesView` does not have any generic constraints so defining them is straightforward, pin its top edge to the bottom of the `pictureView` and pin its left and right edges to the superview which makes it span the full width.
+
+The following function creates layout constraints which apply only to the iPhone portrait orientation. The Masonry constraint maker `mas_makeConstraints:` returns an array of the constraints created. We use that return value to store the portrait constraints in a view controller array property. We'll use this array later to toggle the constraints off and on as the device changes orientation.
 
 {% highlight objective-c %}
 - (void)installPhonePortraitConstraints
@@ -120,7 +128,17 @@ The following function creates layout constraints which apply only to the iPhone
 }
 {% endhighlight %}
 
-Similarly ehe following function creates layout constraints which apply only to the iPhone landscape orientation. Once again we stored the constraimts in a property so we can swicth them on and off as required.
+#### Landscape Constraints
+
+The next step is to install the constraints relevant only to landscape orientation. Again determining which constraints are required is a process of _filling-in-the-blanks_ from the generic constraints illustration.
+
+{% include figure.html caption="Landscape Constraints" asset="/assets/landscape-constraints.jpg" %}
+
+The landscape specific constraints include, pinning the `PictureView` top and bottom edges to the `HeaderView` bottom edge and super view bottom edge respectively. The left edge of the `AuthorView` is pinned to the right edge of the `PictureView`. The `LikesView` top and left edge are pinned to the `AuthorView` top edge and `PictureView` left edge respectively.
+
+Attempting to pin the right edge of the `AuthorView` and `LikesView` will lead to unsatisfiable constraints. The _less-than-or-equal-to_ constrainst allow the views to expand to the intrinsic size of their subviews.
+
+The following function creates the landscape layout constraints. Once again we store the constraints in a view controller array property which we'll use later to toggle constraints on and off.
 
 {% highlight objective-c %}
 - (void)installPhoneLandscapeConstraints
