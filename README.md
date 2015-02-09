@@ -14,4 +14,4 @@ Install gem dependencies with bundler
 
 Run locally with jekyll
 
-    bundle exec jekyll serve
+    bundle exec jekyll serve --watch --drafts
