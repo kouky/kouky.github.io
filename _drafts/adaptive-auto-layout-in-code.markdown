@@ -8,7 +8,7 @@ categories: blog ios
 
 {% include figure.html caption="Image by Matthew Sanders" asset="/assets/adaptive-instagram/Instagram-rotate-size-class.gif" %}
 
-The last half of the article focussed on building an adaptive layout for a hypothetical Instragram interface that shifted information in landscape orientation. I replicated the final results using Interface Builder however I was not impressed by the tediousness of installing, finding, adjusting, and inspecting auto layout constraints visually across multiple [size class traits][size-class-traits].
+The last half of the article focussed on building an adaptive layout for a hypothetical Instagram interface that shifted information in landscape orientation. I replicated the final results using Interface Builder however I was not impressed by the tediousness of installing, finding, adjusting, and inspecting auto layout constraints visually across multiple [size class traits][size-class-traits].
 
 The purpose of this article is to illustrate how that adapative Instagram interface can be recreated in code. I'll be using [Masonry][masonry] a light-weight layout framework which wraps AutoLayout with a nicer syntax.
 
@@ -53,6 +53,8 @@ The code snippet below creates the Auto Layout constraints for the coloured squa
 
 ## Adaptive Instagram Example
 
+Recreating the adaptive layout for Matthew's hypothetical Instragram was straightforward. You can follow along in Xcode by cloning the source for this app from my [github][github-app].
+
 {% include figure.html caption="Recreating Matthew's Adapative Instagram Example" asset="/assets/adaptive-instagram/adaptive-instagram-mike.gif" %}
 
 The graphic below denotes the four main subviews of our hypothetical Instagram application. The challenge will be to manage layout constraints in code as the [size class traits][size-class-traits] change during device rotation.
@@ -62,8 +64,6 @@ The graphic below denotes the four main subviews of our hypothetical Instagram a
 When the interface layout changes to landscape our constraints must slide the `AuthorView` to the right, and move the `LikesView` rightwards and upwards. The `PictureView` will loose its full width constraint meanwhile the `HeaderView` maintains its layout in both orientations. This process must be reversed as the phone rotates back to portrait orientation.
 
 > Note: As of iOS8 all rotation-related methods are deprecated. Instead rotations are treated as a change in the size of the view controller’s view. So when we talk about rotations and orientatons we're really talking about changes in [size class traits][size-class-traits] which are part of the new `UITraitCollection` class.
-
-If you'd prefer to follow along in Xcode clone the source for this app from my [github][github-app].
 
 #### Generic Constraints
 
@@ -105,7 +105,7 @@ The next step is to install the constraints relevant only for the portrait orien
 
 The portarit specific constraints include pinning the `AuthorView` left and right edges to the super view, this makes it span the full width. Pinning the top and right edge of the `PictureView` to the bottom of the `AuthorView` and the right edge of the superview respectively. The `LikesView` does not have any generic constraints so defining them is straightforward, pin its top edge to the bottom of the `PictureView` and pin its left and right edges to the superview which makes it span the full width.
 
-The following function creates the portrait layout constraints. The Masonry constraint maker `mas_makeConstraints:` conveniently returns an array of the constraints created which we store in a view controller property. We'll use this array later to uninstall the constraints as the device changes orientation.
+The following function creates the portrait layout constraints. The Masonry constraint maker `MASConstraintMaker` conveniently returns the constraint created which we add to an array property. We'll use this array later to uninstall the constraints as the device changes orientation.
 
 {% highlight objective-c %}
 - (void)installPhonePortraitConstraints
@@ -138,9 +138,9 @@ The next step is to install the constraints relevant only to landscape orientati
 
 The landscape specific constraints include, pinning the `PictureView` top and bottom edges to the `HeaderView` bottom edge and super view bottom edge respectively. The left edge of the `AuthorView` is pinned to the right edge of the `PictureView`. The `LikesView` top and left edges are pinned to the `AuthorView` top edge and `PictureView` left edge respectively.
 
-Attempting to pin the right edge of the `AuthorView` and `LikesView` to the super view will lead to unsatisfiable constraints. The _less-than-or-equal-to_ constrainst allows the views to expand to the intrinsic size of their subviews.
+Attempting to pin the right edge of the `AuthorView` and `LikesView` to the super view will lead to unsatisfiable constraints. The _less-than-or-equal-to_ width constraint allows the views to expand to the intrinsic width of their subviews.
 
-The following function creates the landscape layout constraints. Once again we store the constraints in a view controller array property which we'll use later to toggle unistall the constraints.
+The following function creates the landscape layout constraints. Once again we store the constraints in a view controller array property which we'll use later to uninstall the constraints.
 
 {% highlight objective-c %}
 - (void)installPhoneLandscapeConstraints
@@ -169,9 +169,9 @@ The following function creates the landscape layout constraints. Once again we s
 
 ### Toggling Constraints
 
-The functions we just discussed are concerned with creating the constraints. As mentioned earlier the challenge will be to manage layout constraints as the [size class traits][size-class-traits] change during device rotation.
+The functions we just discussed so far are concerned with creating constraints. As mentioned earlier the challenge will be to manage layout constraints as the [size class traits][size-class-traits] change during device rotation.
 
-The following function when called with a trait collection argument will install the constraints matching the device orientation and uninstall the constraints which are no longer relevant. The _uninstall_ prefixed helper methods are simply uninstalling the constraints which we stored a reference to earlier.
+The following function when called will install the constraints matching the device orientation for a trait collection and uninstall the constraints which are no longer relevant. The _uninstall_ prefixed helper methods are simply uninstalling the constraints which we stored a reference
 
 {% highlight objective-c %}
 - (void)toggleConstraintsForTraitCollection:(UITraitCollection *)traitCollection
@@ -216,8 +216,6 @@ Connecting all this up to our view controller is straightforward, all the heavy 
 
 Override the `UIViewController` template method `updateViewConstraints` and install the generic constraints which will always be active. Then call helper method `toggleConstraintsForTraitCollection:` which will install constraints for the current [size class traits][size-class-traits].
 
-> Note: There's a potential problem with `updateViewConstraints` as it can be called more than once when the view initialises and when the size class traits change during rotation. We guard subsequent installation of constraints with a flag which from my research seems to be current best practice.
-
 {% highlight objective-c %}
 #pragma mark UIViewController template methods
 
@@ -234,6 +232,8 @@ Override the `UIViewController` template method `updateViewConstraints` and inst
 }
 {% endhighlight %}
 
+> Note: There's a potential problem with `updateViewConstraints` as it can be called more than once when the view initialises and when the size class traits change during rotation. We guard against double installation of constraints with a flag which from my research seems to be current best practice.
+
 The final step is to implement protocol method `viewWillTransitionToSize:withTransitionCoordinator:` which communicates changes in size class traits for the view controller. Its body calls helper method `toggleConstraintsForTraitCollection:` which will install and uninstall constraints as required.
 
 {% highlight objective-c %}
@@ -249,9 +249,9 @@ The final step is to implement protocol method `viewWillTransitionToSize:withTra
 
 If you managed to follow all of that through well done. You can download the source for this app from my [github][github-app] for reference.
 
-Working with Auto Layout and adapting your interfaces to different screen sizes for iOS is  more important that ever. Using Interface Builder, and Storyboards will get you a long way but, and I'm not at all suggesting that you banish them from your workflow. However for all but the most simplest applications you wil need to get down into the trenches and right view code and setup layout constraints in code. Hopefully this article will help you in that task.
+Working with Auto Layout and adapting your interfaces to different screen sizes for iOS is  more important that ever. Using Interface Builder and Storyboards will get you a long way, I'm not suggesting that you banish them from your workflow. For all but the most simplest of applications you will at some point need to get into the trenches and write layout constraints in code. Hopefully this article will help you in that task.
 
-If you have any questions, comments, concerns, or corrections please do [get in touch](/about).
+If you have any questions or comments please do [get in touch](/about).
 
 [matthew]: http://mathewsanders.com/
 [matthew-article]: http://mathewsanders.com/designing-adaptive-layouts-for-iphone-6-plus/
