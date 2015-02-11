@@ -4,17 +4,17 @@ title:  "Adaptive Auto Layout in Code"
 categories: blog ios
 ---
 
-[Matthew Sanders][matthew] posted an excellent article in September 2014 on [Adaptive Layouts for iPhone 6][matthew-article]. Written as instructive piece I followed along in Xcode 6 recreating the examples using Interface Builder to create views and auto layout constraints visually.
+[Matthew Sanders][matthew] posted an excellent article in September 2014 on [Adaptive Layouts for iPhone 6][matthew-article]. It was written as an instructive piece so I followed along in Xcode 6 recreating the examples using Interface Builder to produce views and auto layout constraints visually.
 
 {% include figure.html caption="Image by Matthew Sanders" asset="/assets/adaptive-instagram/Instagram-rotate-size-class.gif" %}
 
-The last half of the article focussed on building an adaptive layout for a hypothetical Instagram interface that shifted information in landscape orientation. I replicated the final results using Interface Builder however I was not impressed by the tediousness of installing, finding, adjusting, and inspecting auto layout constraints visually across multiple [size class traits][size-class-traits].
+The last half of the article focused on building an adaptive layout for a hypothetical Instagram interface that shifted information in landscape orientation. I replicated the final results using Interface Builder however I was not impressed by the tediousness of installing, finding, adjusting, and inspecting auto layout constraints visually across multiple [size class traits][size-class-traits].
 
-The purpose of this article is to illustrate how that adapative Instagram interface can be recreated in code. I'll be using [Masonry][masonry] a light-weight layout framework which wraps AutoLayout with a nicer syntax.
+The purpose of this article is to illustrate how that adapative Instagram interface can be recreated in code. I'll be using [Masonry][masonry], a light-weight layout framework which wraps Auto Layout with a nicer syntax.
 
 ## Simple Squares
 
-To illustrate the succint layout DSL provided by [Masonry][masonry] we can recereate the coloured squares example from first half of Matthew's article.
+To illustrate the succinct layout DSL provided by [Masonry][masonry] we can recreate the coloured squares example from the first half of Matthew's article.
 
 {% include figure.html caption="Image by Matthew Sanders" asset="/assets/adaptive-instagram/Constraint-5.gif" %}
 
@@ -53,7 +53,7 @@ The code snippet below creates the Auto Layout constraints for the coloured squa
 
 ## Adaptive Instagram Example
 
-Recreating the adaptive layout for Matthew's hypothetical Instragram was straightforward. You can follow along in Xcode by cloning the source for this app from my [github][github-app].
+Recreating the adaptive layout for Matthew's hypothetical Instagram was straightforward. You can follow along in Xcode by cloning the source for this app from my [github][github-app].
 
 {% include figure.html caption="Recreating Matthew's Adapative Instagram Example" asset="/assets/adaptive-instagram/adaptive-instagram-mike.gif" %}
 
@@ -61,7 +61,7 @@ The graphic below denotes the four main subviews of our hypothetical Instagram a
 
 {% include figure.html caption="Layout Subviews" asset="/assets/adaptive-instagram/layout-overview.jpg" %}
 
-When the interface layout changes to landscape our constraints must slide the `AuthorView` to the right, and move the `LikesView` rightwards and upwards. The `PictureView` will loose its full width constraint meanwhile the `HeaderView` maintains its layout in both orientations. This process must be reversed as the phone rotates back to portrait orientation.
+When the interface layout changes to landscape our constraints must slide the `AuthorView` to the right, and move the `LikesView` rightwards and upwards. The `PictureView` will remove its full width constraint meanwhile the `HeaderView` maintains its layout in both orientations. This process must be reversed as the phone rotates back to portrait orientation.
 
 > Note: As of iOS8 all rotation-related methods are deprecated. Instead rotations are treated as a change in the size of the view controller’s view. So when we talk about rotations and orientatons we're really talking about changes in [size class traits][size-class-traits] which are part of the new `UITraitCollection` class.
 
@@ -71,23 +71,21 @@ Our first task is to install the constraints for the generic size class, and by 
 
 {% include figure.html caption="Generic Constraints" asset="/assets/adaptive-instagram/generic-constraints.jpg" %}
 
-The generic constraints are as follows, the `HeaderView` has a fixed height; its left, right, and top edges are pinned to the super view. Our `PictureView` will always be displayed as a square so we define a contraint equating its height and width.  The `AuthorView` will also have a fixed height and its top edge will always be pinned to the bottom edge of the `HeaderView`.
+As seen in the generic constraints graphic above, the `HeaderView` has a fixed height and its left, right, and top edges are pinned to the super view. Our `PictureView` will always be displayed as a square so we define a contraint equating its height and width.  The `AuthorView` will also have a fixed height and its top edge will always be pinned to the bottom edge of the `HeaderView`.
 
-The following function when called will create and install these generic constraints.
+The following view controller function when called will create and install these generic constraints.
 
 {% highlight objective-c %}
 - (void)installGenericConstraints
 {
-    UIView *superView = self.view;
-
     [self.headerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(@60);
-        make.left.right.and.top.equalTo(superView);
+        make.left.right.and.top.equalTo(self.view);
     }];
 
     [self.pictureView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(self.pictureView.mas_width);
-        make.left.equalTo(superView);
+        make.left.equalTo(self.view);
     }];
 
     [self.authorView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -103,9 +101,9 @@ The next step is to install the constraints relevant only for the portrait orien
 
 {% include figure.html caption="Portrait Constraints" asset="/assets/adaptive-instagram/portrait-constraints.jpg" %}
 
-The portarit specific constraints include pinning the `AuthorView` left and right edges to the super view, this makes it span the full width. Pinning the top and right edge of the `PictureView` to the bottom of the `AuthorView` and the right edge of the superview respectively. The `LikesView` does not have any generic constraints so defining them is straightforward, pin its top edge to the bottom of the `PictureView` and pin its left and right edges to the superview which makes it span the full width.
+The portrait specific constraints include pinning the `AuthorView` left and right edges to the super view, which makes it span the full width. Pin the top and right edge of the `PictureView` to the bottom of the `AuthorView` and the right edge of the superview respectively. The `LikesView` does not have any generic constraints so defining them is straightforward: pin its top edge to the bottom of the `PictureView` and pin its left and right edges to the superview which makes it span the full width.
 
-The following function creates the portrait layout constraints. The Masonry constraint maker `MASConstraintMaker` conveniently returns the constraint created which we add to an array property. We'll use this array later to uninstall the constraints as the device changes orientation.
+The following view controller function creates the portrait layout constraints. The Masonry constraint maker `MASConstraintMaker` conveniently returns the constraint created which we add to an array property. We'll use this array later to uninstall the constraints as the device changes orientation.
 
 {% highlight objective-c %}
 - (void)installPhonePortraitConstraints
@@ -136,11 +134,11 @@ The next step is to install the constraints relevant only to landscape orientati
 
 {% include figure.html caption="Landscape Constraints" asset="/assets/adaptive-instagram/landscape-constraints.jpg" %}
 
-The landscape specific constraints include, pinning the `PictureView` top and bottom edges to the `HeaderView` bottom edge and super view bottom edge respectively. The left edge of the `AuthorView` is pinned to the right edge of the `PictureView`. The `LikesView` top and left edges are pinned to the `AuthorView` top edge and `PictureView` left edge respectively.
+The landscape specific constraints include pinning the `PictureView` top and bottom edges to the `HeaderView` bottom edge and super view bottom edge respectively. The left edge of the `AuthorView` is pinned to the right edge of the `PictureView`. The `LikesView` top and left edges are pinned to the `AuthorView` top edge and `PictureView` left edge respectively.
 
 Attempting to pin the right edge of the `AuthorView` and `LikesView` to the super view will lead to unsatisfiable constraints. The _less-than-or-equal-to_ width constraint allows the views to expand to the intrinsic width of their subviews.
 
-The following function creates the landscape layout constraints. Once again we store the constraints in a view controller array property which we'll use later to uninstall the constraints.
+The following view controller function creates the landscape layout constraints. Once again we store the constraints in a view controller array property which we'll use later to uninstall the constraints.
 
 {% highlight objective-c %}
 - (void)installPhoneLandscapeConstraints
@@ -169,9 +167,9 @@ The following function creates the landscape layout constraints. Once again we s
 
 ### Toggling Constraints
 
-The functions we just discussed so far are concerned with creating constraints. As mentioned earlier the challenge will be to manage layout constraints as the [size class traits][size-class-traits] change during device rotation.
+The functions we just discussed are concerned with creating constraints. As mentioned earlier the challenge will be to manage layout constraints as the [size class traits][size-class-traits] change during device rotation.
 
-The following function when called will install the constraints matching the device orientation for a trait collection and uninstall the constraints which are no longer relevant. The _uninstall_ prefixed helper methods are simply uninstalling the constraints which we stored a reference
+The following function when called will install the constraints matching the device orientation for a trait collection and uninstall the constraints which are no longer relevant. The _uninstall_ prefixed helper methods are simply uninstalling the constraints which we stored a reference to earlier.
 
 {% highlight objective-c %}
 - (void)toggleConstraintsForTraitCollection:(UITraitCollection *)traitCollection
@@ -247,9 +245,9 @@ The final step is to implement protocol method `viewWillTransitionToSize:withTra
 
 ### Final Remarks
 
-If you managed to follow all of that through well done. You can download the source for this app from my [github][github-app] for reference.
+Working with Auto Layout and adapting your interfaces to different screen sizes for iOS is more important that ever. Using Interface Builder and Storyboards will get you a long way, and I'm not suggesting that you banish them from your workflow. However for all but the most simple of applications you will need to get into the trenches and write layout constraints in code. I hope this article will help you in that task.
 
-Working with Auto Layout and adapting your interfaces to different screen sizes for iOS is  more important that ever. Using Interface Builder and Storyboards will get you a long way, I'm not suggesting that you banish them from your workflow. For all but the most simplest of applications you will at some point need to get into the trenches and write layout constraints in code. Hopefully this article will help you in that task.
+You can download the source for this app from my [github][github-app] for reference.
 
 If you have any questions or comments please do [get in touch](/about).
 
