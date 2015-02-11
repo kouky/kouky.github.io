@@ -59,11 +59,11 @@ The graphic below denotes the four main subviews of our hypothetical Instagram a
 
 {% include figure.html caption="Layout Subviews" asset="/assets/adaptive-instagram/layout-overview.jpg" %}
 
-When the interface layout changes to landscape our constraints must slide the `AuthorView` to the right, and move the `LikesView` rightwards and upwards. The `PictureView` will loose it's full width constraint meanwhile the `HeaderView` maintains its layout in both orientations. This process must be reversed as the phone rotates back to portrait orientation.
+When the interface layout changes to landscape our constraints must slide the `AuthorView` to the right, and move the `LikesView` rightwards and upwards. The `PictureView` will loose its full width constraint meanwhile the `HeaderView` maintains its layout in both orientations. This process must be reversed as the phone rotates back to portrait orientation.
 
 > Note: As of iOS8 all rotation-related methods are deprecated. Instead rotations are treated as a change in the size of the view controller’s view. So when we talk about rotations and orientatons we're really talking about changes in [size class traits][size-class-traits] which are part of the new `UITraitCollection` class.
 
-If you'd prefer to follow along in Xcode clone the source for this app from my [github][github-app].`
+If you'd prefer to follow along in Xcode clone the source for this app from my [github][github-app].
 
 #### Generic Constraints
 
