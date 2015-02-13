@@ -1,14 +1,14 @@
 ---
 layout: post
 title:  "Adaptive Auto Layout in Code"
-categories: blog ios
+categories: blog
 ---
 
 [Matthew Sanders][matthew] posted an excellent article in September 2014 on [Adaptive Layouts for iPhone 6][matthew-article]. It was written as an instructive piece so I followed along in Xcode 6 recreating the examples using Interface Builder to produce views and auto layout constraints visually.
 
 {% include figure.html caption="Image by Matthew Sanders" asset="/assets/adaptive-instagram/Instagram-rotate-size-class.gif" %}
 
-The last half of the article focused on building an adaptive layout for a hypothetical Instagram interface that shifted information in landscape orientation. I replicated the final results using Interface Builder however I was not impressed by the tediousness of installing, finding, adjusting, and inspecting auto layout constraints visually across multiple [size class traits][size-class-traits].
+The last half of the article focused on building an [adaptive layout][adaptive-apple] for a hypothetical Instagram interface that shifted information in landscape orientation. I replicated the final results using Interface Builder however I was not impressed by the tediousness of installing, finding, adjusting, and inspecting auto layout constraints visually across multiple [size class traits][size-class-traits].
 
 The purpose of this article is to illustrate how that adaptive Instagram interface can be recreated in code. I'll be using [Masonry][masonry], a light-weight layout framework which wraps Auto Layout with a nicer syntax.
 
@@ -53,7 +53,7 @@ The code snippet below creates the Auto Layout constraints for the coloured squa
 
 ## Adaptive Instagram Example
 
-Recreating the adaptive layout for Matthew's hypothetical Instagram was straightforward. You can follow along in Xcode by cloning the source for this app from my [github][github-app].
+Recreating the adaptive layout for Matthew's hypothetical Instagram interface was straightforward. You can follow along in Xcode by cloning the source for this app from my [github][github-app].
 
 {% include figure.html caption="Recreating Matthew's Adaptive Instagram Example" asset="/assets/adaptive-instagram/adaptive-instagram-mike.gif" %}
 
@@ -253,6 +253,7 @@ If you have any questions or comments please do [get in touch](/about).
 
 [matthew]: http://mathewsanders.com/
 [matthew-article]: http://mathewsanders.com/designing-adaptive-layouts-for-iphone-6-plus/
+[adaptive-apple]: https://developer.apple.com/design/adaptivity/
 [masonry]: https://github.com/Masonry/Masonry
 [update-constraints]: https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIView_Class/#//apple_ref/occ/instm/UIView/updateConstraints
 [masonry-squares-fork]: https://github.com/kouky/Masonry/blob/squares-example/Examples/Masonry%20iOS%20Examples/MASExampleSquaresView.m
