@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Double Dispatch Sprite Kit Physics Contacts"
-categories: blog ios
+categories: blog
 ---
 
 I picked the the classic video game [Pong](http://en.wikipedia.org/wiki/Pong) to provide a working example of the recommendation in the Sprite Kit programming guide to use Double Dispatch to farm out work associated with node physics body contacts in the simulation.
