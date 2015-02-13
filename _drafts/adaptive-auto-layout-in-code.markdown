@@ -10,7 +10,7 @@ categories: blog ios
 
 The last half of the article focused on building an adaptive layout for a hypothetical Instagram interface that shifted information in landscape orientation. I replicated the final results using Interface Builder however I was not impressed by the tediousness of installing, finding, adjusting, and inspecting auto layout constraints visually across multiple [size class traits][size-class-traits].
 
-The purpose of this article is to illustrate how that adapative Instagram interface can be recreated in code. I'll be using [Masonry][masonry], a light-weight layout framework which wraps Auto Layout with a nicer syntax.
+The purpose of this article is to illustrate how that adaptive Instagram interface can be recreated in code. I'll be using [Masonry][masonry], a light-weight layout framework which wraps Auto Layout with a nicer syntax.
 
 ## Simple Squares
 
@@ -55,7 +55,7 @@ The code snippet below creates the Auto Layout constraints for the coloured squa
 
 Recreating the adaptive layout for Matthew's hypothetical Instagram was straightforward. You can follow along in Xcode by cloning the source for this app from my [github][github-app].
 
-{% include figure.html caption="Recreating Matthew's Adapative Instagram Example" asset="/assets/adaptive-instagram/adaptive-instagram-mike.gif" %}
+{% include figure.html caption="Recreating Matthew's Adaptive Instagram Example" asset="/assets/adaptive-instagram/adaptive-instagram-mike.gif" %}
 
 The graphic below denotes the four main subviews of our hypothetical Instagram application. The challenge will be to manage layout constraints in code as the [size class traits][size-class-traits] change during device rotation.
 
