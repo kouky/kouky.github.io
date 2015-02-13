@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Adaptive Auto Layout in Code"
+title:  "iOS Adaptive Layouts in Code"
 categories: blog
 ---
 
