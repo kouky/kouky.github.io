@@ -71,7 +71,7 @@ Our first task is to install the constraints for the generic size class, and by 
 
 {% include figure.html caption="Generic Constraints" asset="/assets/adaptive-instagram/generic-constraints.jpg" %}
 
-As seen in the generic constraints graphic above, the `HeaderView` has a fixed height and its left, right, and top edges are pinned to the super view. Our `PictureView` will always be displayed as a square so we define a contraint equating its height and width.  The `AuthorView` will also have a fixed height and its top edge will always be pinned to the bottom edge of the `HeaderView`.
+As seen in the generic constraints graphic above, the `HeaderView` has a fixed height and its left, right, and top edges are pinned to the super view. Our `PictureView` will always be displayed as a square so we define a constraint equating its height and width.  The `AuthorView` will also have a fixed height and its top edge will always be pinned to the bottom edge of the `HeaderView`.
 
 The following view controller function when called will create and install these generic constraints.
 
