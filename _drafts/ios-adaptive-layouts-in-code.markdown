@@ -251,6 +251,16 @@ You can download the source for this app from my [github][github-app] for refere
 
 If you have any questions or comments please do [get in touch](/about).
 
+### Updates
+
+Soon after drafting this post I watched a keynote on [React Native][react-native] which I highly recommend. The promise React Native holds is a declarative approach to defining our views and their layouts. This means the code is written in such a way that it describes what you want to do, and not how you want to do it.
+
+[Andy Matuschak][andy-twitter] a former UIKIt author put it simply in his tweet.
+
+<blockquote class="twitter-tweet" lang="en"><p>I say with confidence as a former UIKit author: React&#39;s model for the UI layer is vastly better than UIKit&#39;s. React Native is a *huge* deal.</p>&mdash; Andy Matuschak (@andy_matuschak) <a href="https://twitter.com/andy_matuschak/status/560511204867575808">January 28, 2015</a></blockquote> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+[Josh Abernathy][josh-twitter] also wrote a short and sharp post titled  on [why reactive native matters][josh-article].
+
 [matthew]: http://mathewsanders.com/
 [matthew-article]: http://mathewsanders.com/designing-adaptive-layouts-for-iphone-6-plus/
 [adaptive-apple]: https://developer.apple.com/design/adaptivity/
@@ -260,3 +270,7 @@ If you have any questions or comments please do [get in touch](/about).
 [size-class-traits]: https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/MobileHIG/LayoutandAppearance.html
 [github-app]: https://github.com/kouky/adaptive-instagram-app
 [github-app-category]: https://github.com/kouky/adaptive-instagram-app/blob/master/AdaptiveInstagram/UITraitCollection%2BMKAdditions.m
+[react-native]: https://www.youtube.com/watch?v=7rDsRXj9-cU#t=11
+[andy-twitter]: https://twitter.com/andy_matuschak
+[josh-twitter]: https://twitter.com/joshaber
+[josh-article]: http://joshaber.github.io/2015/01/30/why-react-native-matters/
