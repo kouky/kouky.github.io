@@ -259,7 +259,7 @@ Soon after drafting this post I watched a keynote on [React Native][react-native
 
 <blockquote class="twitter-tweet" lang="en"><p>I say with confidence as a former UIKit author: React&#39;s model for the UI layer is vastly better than UIKit&#39;s. React Native is a *huge* deal.</p>&mdash; Andy Matuschak (@andy_matuschak) <a href="https://twitter.com/andy_matuschak/status/560511204867575808">January 28, 2015</a></blockquote> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-[Josh Abernathy][josh-twitter] also wrote a short and sharp post titled  on [why reactive native matters][josh-article].
+[Josh Abernathy][josh-twitter] also wrote a short and sharp post on [why reactive native matters][josh-article].
 
 [matthew]: http://mathewsanders.com/
 [matthew-article]: http://mathewsanders.com/designing-adaptive-layouts-for-iphone-6-plus/
