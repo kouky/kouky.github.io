@@ -25,7 +25,7 @@ The PlayfieldScene is assigned as the contact delegate for the physics world and
 
 The main observation to make is that the bodies in a contact can appear in any order. For example the first two clauses in the conditional below are essectially checking for the same thing, that the ball is contacting the PlayfieldScene edges.
 
-{% highlight objective-c %}
+{% highlight objc %}
 - (void)didBeginContact:(SKPhysicsContact *)contact
 {
     SKPhysicsBody *firstBody, *secondBody;
@@ -65,7 +65,7 @@ Firstly embedding all the logic in the scene's contact delegate method will resu
 
 Secondly the code required to handle the outcome of each contact, needs to be written in or referenced twice. This could be addressed by by combining the double up with an OR operation, not that great for legibility.
 
-{% highlight objective-c %}
+{% highlight objc %}
 if (((firstBody.categoryBitMask & ballCategory) != 0 &&
      (secondBody.categoryBitMask & playfieldCategory) != 0) ||
 
@@ -79,7 +79,7 @@ if (((firstBody.categoryBitMask & ballCategory) != 0 &&
 
 Another approach to counter the double up is the bitwise sorting approach in the programming guide's rocket contact example code example, reproduced below.
 
-{% highlight objective-c %}
+{% highlight objc %}
 if (contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask)
 {
     firstBody = contact.bodyA;
@@ -102,7 +102,7 @@ This approach will still require further nested conditionals to determine the ou
 
 Using the Visitor pattern we can double dispatch the outcome of the contact based on both bodies. The contact delegate no longer discerns the categroies of the physics body, its implementation shrinks to just the following.
 
-{% highlight objective-c %}
+{% highlight objc %}
 - (void)didBeginContact:(SKPhysicsContact *)contact
 {
 
@@ -122,7 +122,7 @@ Using the Visitor pattern we can double dispatch the outcome of the contact base
 
 The `VisitablePhysicsBody` class is a simple wrapper for an _SKPhysicsBody_ instance. It implements a method called accept, which accepts the visitor, and which in turn invokes the actual visit. A wrapper is used as _acceptVisitor_ cannot be implemented as a category on `SKPhysicsBody` given the physics bodies carried by the `SKPhysicsContact` instance are actually instances of private class `PKPhysicsBody`.
 
-{% highlight objective-c %}
+{% highlight objc %}
 @implementation VisitablePhysicsBody
 
 - (id)initWithBody:(SKPhysicsBody *)body
@@ -145,7 +145,7 @@ The `VisitablePhysicsBody` class is a simple wrapper for an _SKPhysicsBody_ inst
 Out _ContactVisitor_ base class implements convenience constructor `contactVisitorWithBody:forContact` which constructs one of its subclasses based on the physics body category of it's first argument. This is the first part of the double dispatch, we have an instance of a class which is named after one of the bodies in the contact e.g. `BallNodeContactVisitor` `PaddleNodeContactVisitor` etc.
 
 
-{% highlight objective-c %}
+{% highlight objc %}
 @implementation ContactVisitor
 
 + (id)contactVisitorWithBody:(SKPhysicsBody *)body forContact:(SKPhysicsContact *)contact
@@ -178,7 +178,7 @@ Out _ContactVisitor_ base class implements convenience constructor `contactVisit
 The `visit` method in our `ContactVisitor` implements the second part of the double dispatch by sending a message named after the second physics body in the contact to the newly constructed `ContactVisitor` subclass instance which is named after the first body in the contact e.g. `visitBallNode` `visitPaddleNode` etc.
 
 
-{% highlight objective-c %}
+{% highlight objc %}
 ...
 
 - (void)visit:(SKPhysicsBody *)body
@@ -204,7 +204,7 @@ The `visit` method in our `ContactVisitor` implements the second part of the dou
 
 We now have a class `BallNodeContactVisitor` which is solely concenred with handling contacts for nodes of class `BallNode`. The methods within the class follow a naming convention determined by the `visit` method and allows us to determine the outcome of the contact with other node types.
 
-{% highlight objective-c %}
+{% highlight objc %}
 @implementation BallNodeContactVisitor
 
 // Handles contacts with PlayfieldScene edges
@@ -229,7 +229,7 @@ We now have a class `BallNodeContactVisitor` which is solely concenred with hand
 
 On the flip side we have another class named `PaddleNodeContactVisitor` which handles contacts for nodes of class `PaddleNode`.
 
-{% highlight objective-c %}
+{% highlight objc %}
 @implementation PaddleNodeContactVisitor
 
 // Handles contacts with BallNodes

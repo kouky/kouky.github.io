@@ -20,7 +20,7 @@ To illustrate the succinct layout DSL provided by [Masonry][masonry] we can recr
 
 The code snippet below creates the Auto Layout constraints for the coloured squares in the `UIView` method [updateConstraints][update-constraints]. The chainable expressive syntax of Masonry shines through. The entire view code is available as working example on my [github][masonry-squares-fork].
 
-{% highlight objective-c %}
+{% highlight objc %}
 - (void)updateConstraints
 {
     UIView *superView = self;
@@ -75,7 +75,7 @@ As seen in the generic constraints graphic above, the `HeaderView` has a fixed h
 
 The following view controller function when called will create and install these generic constraints.
 
-{% highlight objective-c %}
+{% highlight objc %}
 - (void)installGenericConstraints
 {
     [self.headerView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -105,7 +105,7 @@ The portrait specific constraints include pinning the `AuthorView` left and righ
 
 The following view controller function creates the portrait layout constraints. The Masonry constraint maker `MASConstraintMaker` conveniently returns the constraint created which we add to an array property. We'll use this array later to uninstall the constraints as the device changes orientation.
 
-{% highlight objective-c %}
+{% highlight objc %}
 - (void)installPhonePortraitConstraints
 {
     NSMutableArray *constraints = [[NSMutableArray alloc] init];
@@ -140,7 +140,7 @@ Attempting to pin the right edge of the `AuthorView` and `LikesView` to the supe
 
 The following view controller function creates the landscape layout constraints. Once again we store the constraints in a view controller array property which we'll use later to uninstall the constraints.
 
-{% highlight objective-c %}
+{% highlight objc %}
 - (void)installPhoneLandscapeConstraints
 {
     NSMutableArray *constraints = [[NSMutableArray alloc] init];
@@ -171,7 +171,7 @@ The functions we just discussed are concerned with creating constraints. As ment
 
 The following function when called will install the constraints matching the device orientation for a trait collection and uninstall the constraints which are no longer relevant. The _uninstall_ prefixed helper methods are simply uninstalling the constraints which we stored a reference to earlier.
 
-{% highlight objective-c %}
+{% highlight objc %}
 - (void)toggleConstraintsForTraitCollection:(UITraitCollection *)traitCollection
 {
     if ([traitCollection mk_matchesPhoneLandscape]) {
@@ -214,7 +214,7 @@ Connecting all this up to our view controller is straightforward, all the heavy 
 
 Override the `UIViewController` template method `updateViewConstraints` and install the generic constraints which will always be active. Then call helper method `toggleConstraintsForTraitCollection:` which will install constraints for the current [size class traits][size-class-traits].
 
-{% highlight objective-c %}
+{% highlight objc %}
 #pragma mark UIViewController template methods
 
 - (void)updateViewConstraints
@@ -234,7 +234,7 @@ Override the `UIViewController` template method `updateViewConstraints` and inst
 
 The final step is to implement protocol method `viewWillTransitionToSize:withTransitionCoordinator:` which communicates changes in size class traits for the view controller. Its body calls helper method `toggleConstraintsForTraitCollection:` which will install and uninstall constraints as required.
 
-{% highlight objective-c %}
+{% highlight objc %}
 #pragma mark UIContentContainer protocol methods
 
 - (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
