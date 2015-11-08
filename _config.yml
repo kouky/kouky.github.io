@@ -11,3 +11,6 @@ github_username:  kouky
 
 # Build settings
 markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
