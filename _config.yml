@@ -13,4 +13,3 @@ github_username:  kouky
 markdown: kramdown
 kramdown:
   input: GFM
-  syntax_highlighter: rouge

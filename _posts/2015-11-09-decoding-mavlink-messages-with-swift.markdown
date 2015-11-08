@@ -31,20 +31,20 @@ To get the [MAVLink C library][github-mavlink-c] working within an Xcode project
 
 Add the C library into an Xcode project as a git submodule.  Submodules are the lowest common denomitaor of dependency management.  It makes it easy to pull in the frequent upstream updates to MAVLink. I prefer to use a `Vendor` sub directory for third-party libraries. Add the submodule with the following command:
 
-```
+{% highlight text %}
 git submodule add git@github.com:mavlink/c_library.git Vendor/Mavlink
-```
+{% endhighlight %}
 
 ### Create a Clang Module
 
 Bridging headers are one way of making C code available in a Swift project. A [Clang module][clang-module] is another method which is better in this case. Create a `Modules` subdirectory and add a `module.map` file with the following contents:
 
-```
+{% highlight text %}
 module Mavlink [system] {
     header "../Vendor/Mavlink/common/mavlink.h"
     export *
 }
-```
+{% endhighlight %}
 
 ### Add Module Path to Xcode
 
@@ -52,9 +52,9 @@ The final step is to inform Xcode of the module. Add the module to the the proje
 
 With that all done you can import the MAVLink library at the top of any Swift file with the following statement:
 
-``` swift
+{% highlight swift %}
 import Mavlink
-```
+{% endhighlight %}
 
 ## Reading the MAVLink byte stream
 
@@ -72,7 +72,7 @@ The sample project details how to detect and connect to Pixhawk's serial interfa
 
 Prior to opening a serial port interface to Pixhawk, configure the baud rate, stop bits, and parity with the values listed below. The sample project uses stored property observers to achieve this.
 
-``` swift
+{% highlight swift %}
 var serialPort: ORSSerialPort? {
     didSet {
         oldValue?.close()
@@ -83,13 +83,13 @@ var serialPort: ORSSerialPort? {
         serialPort?.parity = .None
     }
 }
-```
+{% endhighlight %}
 
 Once the serial port is open, a delegate method will notify your application that bytes are available for parsing.
 
 Pass the value of each byte to the MAVLink helper method `mavlink_parse_char()`
 
-``` swift
+{% highlight swift %}
 // ORSSerialPort delegate method
 func serialPort(serialPort: ORSSerialPort, didReceiveData data: NSData) {
     var bytes = [UInt8](count: data.length, repeatedValue: 0)
@@ -104,11 +104,11 @@ func serialPort(serialPort: ORSSerialPort, didReceiveData data: NSData) {
         }
     }
 }
-```
+{% endhighlight %}
 
 If `mavlink_parse_char()` returns with a truthy value, it means a MAVLink packet has been plucked from the byte stream. The packet is placed in a struct of type `mavlink_message_t`.
 
-``` c
+{% highlight c %}
 /* Source https://github.com/mavlink/c_library/blob/master/mavlink_types.h */
 MAVPACKED(
 typedef struct __mavlink_message {
@@ -121,7 +121,7 @@ typedef struct __mavlink_message {
     uint8_t msgid;   ///< ID of message in payload
     uint64_t payload64[(MAVLINK_MAX_PAYLOAD_LEN+MAVLINK_NUM_CHECKSUM_BYTES+7)/8];
 }) mavlink_message_t;
-```
+{% endhighlight %}
 
 The most important detail here is the packet `msgid` and `payload`. For a [detailed anatomy of a MAVLink packet][mavlink-packet] refer to the Pixhawk website.
 
@@ -131,19 +131,19 @@ The discerning attribute of the packet is it's `msgid`. Each type of MAVLink mes
 
 Each MAVLink message has an accompanying struct and decode method. To decode the heartbeat message we use a `mavlink_heartbeat_t` struct and the `mavlink_msg_heartbeat_decode()` method.
 
-``` swift
+{% highlight swift %}
 var heartbeat = mavlink_heartbeat_t()
 mavlink_msg_heartbeat_decode(&message, &heartbeat);
 print(heartbeat.mavlink_version)
-```
+{% endhighlight %}
 
 Likewise decoding an attitude message requires a `mavlink_attitude_t` struct and method `mavlink_msg_attitude_decode()`.
 
-``` swift
+{% highlight swift %}
 var attitude = mavlink_attitude_t()
 mavlink_msg_attitude_decode(&message, &attitude)
 print("ATTITUDE roll: \(attitude.roll) pitch: \(attitude.pitch) yaw: \(attitude.yaw)")
-```
+{% endhighlight %}
 
 The [sample project][github-sample] uses a switch statement on the message id to decode a variety of MAVLink messages. These are then printed to a text area for viewing.
 
