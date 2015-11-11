@@ -32,7 +32,7 @@ To get the [MAVLink C library][github-mavlink-c] working within an Xcode project
 Add the C library to an Xcode project as a git submodule.  Submodules are the lowest common denominator of dependency management.  It makes it easy to pull in the frequent upstream updates to MAVLink. I prefer to use a Vendor sub directory for third-party libraries. Add the submodule with the following command:
 
 {% highlight text %}
-git submodule add git@github.com:mavlink/c_library.git Vendor/Mavlink
+git submodule add https://github.com/mavlink/c_library.git Vendor/Mavlink
 {% endhighlight %}
 
 ### Create a Clang Module
