@@ -6,7 +6,7 @@ categories: blog
 
 [PrimaryFlightDisplay][github-primary-flight-display] is a Mac + iOS framework for use in ground control station and telemetry systems for [micro UAVs][micro-uav] (unmanned aerial vehicles).
 
-The framework enables covenient embedding and animation of a primary flight display. Styles and colors are easily tuned whilst maintaining crisp graphics for any screen resolution.
+The framework enables convenient embedding and animation of a primary flight display. Styles and colors are easily tuned whilst maintaining crisp graphics for any screen resolution.
 
 A [demo Xcode project][github-mavlink-primary-flight-display] for [MAVLink][mavlink] speaking autopilots is available from my GitHub.
 
