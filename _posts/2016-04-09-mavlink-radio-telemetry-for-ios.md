@@ -166,7 +166,7 @@ func write(data data: NSData) {
 
 I hope this article was helpful and informative. When I first started working with the Pixhawk autopilot I was frustrated that I couldn't use my iPhone as a development platform. I'm glad to have finally solved that problem.
 
-If you have any questions please do to get in touch.
+If you have any questions please do get in touch.
 
 
 [tower]: https://play.google.com/store/apps/details?id=org.droidplanner.android
