@@ -6,7 +6,7 @@ categories: blog
 
 I'm envious of Android. You can install [Tower][tower] from the Google Play Store, plug in a USB OTG cable connected to an [SiK radio][sik-radio] and viola! Long range telemetry for micro UAVs.
 
-Sadly this simplicity doesn't exist for iOS. Simply stated, iOS doesn't provide the required operating system level libraries to communicate with serial port interfaces such as those on SiK radios. You could attempt to join [Apple's MFi program][apple-mfi] but unless you have [your own electronics manufacturing facility][quora] you're out of luck.
+Sadly this simplicity doesn't exist for iOS. Simply stated, iOS doesn't provide the required operating system level libraries to communicate with serial port interfaces such as those on SiK radios. You could attempt to join [Apple's MFi program][apple-mfi] but unless you're a [company who intends to develop an accessory][stack-exchange] you're out of luck.
 
 This article will demonstrate how to build an inexpensive Bluetooth bridge between an [SiK radio][sik-radio] and an iOS app. This will be of interest if you're building telemetry or ground control station software for iOS.
 
@@ -175,7 +175,7 @@ If you have any questions please do get in touch.
 
 [apple-mfi]: https://developer.apple.com/programs/mfi/
 
-[quora]: https://www.quora.com/Apple-MFi-Program-How-difficult-is-it-to-get-an-MFi-Made-For-iPod-iPhone-iPad-developer-license
+[stack-exchange]: http://apple.stackexchange.com/questions/11794/can-a-hobbyist-or-individual-apply-for-apples-mfi-program
 
 [red-bear-lab]: http://redbearlab.com/
 
