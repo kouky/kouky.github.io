@@ -3,11 +3,13 @@ title: Michael Koukoullis
 role:  Software Engineer
 email: mike@kouky.org
 description: > # this means to ignore newlines until "baseurl:"
-  Michael Koukoullis is a Software Engineer located in Sydney, Australia.
+  Polygot Software Engineer located in Melbourne, Australia. Currenty working on Cash App at Square. 
 baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://kouky.org" # the base hostname & protocol for your site
 twitter_username: kouky
 github_username:  kouky
+linkedin_username: michael-koukoullis-91b0171b
+linkedin_name: michael.k
 
 # Build settings
 markdown: kramdown
