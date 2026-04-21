@@ -92,6 +92,7 @@ h1, h2, h3, h4, h5, h6 {
  */
 a {
     color: $brand-color;
+    text-underline-offset: 0.14em;
     text-decoration: none;
 
     &:visited {
@@ -140,6 +141,7 @@ code {
 pre {
     padding: 8px 12px;
     overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
 
     > code {
         border: 0;
